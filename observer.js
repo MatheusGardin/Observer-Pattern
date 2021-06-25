@@ -1,5 +1,5 @@
 // Definimos a classe
-class Observable {
+class Subject {
     // Cada instância da classe Observer
     // começa com um array vazio de observadores
     // que reagem a uma mudança de estado
@@ -21,30 +21,25 @@ class Observable {
 
     // Atualiza todos os objetos incritos/Elementos DOM
     // e passa alguns dados para cada um deles
-    notify(data) {
-        this.observers.forEach(observer => observer(data));
+    fire() {
+        this.observers.forEach( f => {
+            f.call()
+        })
     }
 }
 
-const input = document.querySelector('.js-input');
-const p1 = document.querySelector('.js-p1');
-const p2 = document.querySelector('.js-p2');
-const p3 = document.querySelector('.js-p3');
 
-// algumas ações para adicionar ao array de observadores
-const updateP1 = text => p1.textContent = text;
-const updateP2 = text => p2.textContent = text;
-const updateP3 = text => p3.textContent = text;
+function ObserverTest(){
+    console.log("observer test works!")
+}
 
-// instanciando uma nova classe Observer
-const headingsObserver = new Observable();
+function AnotherFunction(){
+    console.log("it works again")
+}
 
-// criando inscrição para os observadores
-headingsObserver.subscribe(updateP1);
-headingsObserver.subscribe(updateP2);
-headingsObserver.subscribe(updateP3);
+const subject = new Subject();
 
-// notificando todos os observadores sobre os novos dados baseado no evento selecionado
-input.addEventListener('keyup', e => {
-    headingsObserver.notify(e.target.value);
-});
+subject.subscribe(ObserverTest);
+subject.subscribe(AnotherFunction);
+
+subject.fire();
